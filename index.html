@@ -120,6 +120,40 @@ button{font-family:inherit;cursor:pointer;}
 .bar-fill{height:100%;background:var(--ocean);border-radius:4px;}
 .bar-pct{width:44px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);flex-shrink:0;}
 
+/* ================= ONE-TIME USER GATE ================= */
+.gate-overlay{
+  position:fixed;inset:0;z-index:200;
+  background:linear-gradient(180deg,#3A2113,#2B1B12);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+}
+.gate-card{
+  width:100%;max-width:360px;
+  background:var(--panel);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:40px 30px 32px;
+  text-align:center;
+  position:relative;
+}
+.gate-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:5px;
+  background:var(--ocean);border-radius:var(--radius) var(--radius) 0 0;
+}
+.gate-logo{font-family:'Fraunces',serif;font-weight:700;font-size:30px;color:var(--ink);}
+.gate-logo span{color:var(--ocean);}
+.gate-sub{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--ink-soft);margin-top:8px;margin-bottom:28px;font-weight:600;
+}
+.gate-pick{display:flex;gap:10px;}
+.gate-pick button{
+  flex:1;padding:16px 8px;border-radius:var(--radius-sm);border:1.5px solid var(--line-strong);
+  background:var(--paper);color:var(--ink);font-family:'Fraunces',serif;font-weight:600;font-size:16px;
+  transition:all 0.15s ease; touch-action:manipulation;
+}
+.gate-pick button:hover, .gate-pick button:active{border-color:var(--ocean);background:var(--tide);color:var(--ocean-deep);}
+
 /* ---------- Day nav ---------- */
 .day-nav{
   position:sticky;top:64px;z-index:40;
@@ -130,17 +164,24 @@ button{font-family:inherit;cursor:pointer;}
   max-width:1100px;margin:0 auto;
   padding:10px 32px;
   -ms-overflow-style:none; scrollbar-width:none;
+  scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling:touch;
 }
 .day-nav::-webkit-scrollbar{display:none;}
 .day-tab{
   flex-shrink:0;
-  padding:9px 16px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.04em;
+  padding:11px 16px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.04em;
   color:var(--ink-soft);white-space:nowrap;cursor:pointer;
   border:1px solid var(--line);
   border-radius:20px;
   background:transparent;
   transition:all 0.15s ease;
   display:flex;align-items:center;gap:8px;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  scroll-snap-align:start;
+  appearance:none;
+  -webkit-appearance:none;
 }
 .day-tab .load-dot{display:inline-block;width:6px;height:6px;border-radius:50%;}
 .day-tab.active{ background:var(--ocean-deep); border-color:var(--ocean-deep); color:#FBF4E9; }
@@ -321,6 +362,17 @@ footer{text-align:center;padding:30px 32px;color:var(--ink-faint);font-size:12px
 </head>
 <body>
 
+<div class="gate-overlay" id="gateOverlay">
+  <div class="gate-card">
+    <div class="gate-logo">FORGE<span>.</span></div>
+    <div class="gate-sub">Who's training?</div>
+    <div class="gate-pick" id="gatePick">
+      <button type="button" data-user="Harish">Harish</button>
+      <button type="button" data-user="Suresh">Suresh</button>
+    </div>
+  </div>
+</div>
+
 <div class="topbar">
   <div>
     <div class="logo">FORGE<span>.</span></div>
@@ -387,13 +439,13 @@ footer{text-align:center;padding:30px 32px;color:var(--ink-faint);font-size:12px
 </section>
 
 <nav class="day-nav" id="dayNav">
-  <div class="day-tab active" data-day="1"><span class="load-dot" style="background:var(--heavy)"></span>Day 1</div>
-  <div class="day-tab" data-day="2"><span class="load-dot" style="background:var(--heavy)"></span>Day 2</div>
-  <div class="day-tab" data-day="3"><span class="load-dot" style="background:var(--heavy)"></span>Day 3</div>
-  <div class="day-tab" data-day="4"><span class="load-dot" style="background:var(--moderate)"></span>Day 4</div>
-  <div class="day-tab" data-day="5"><span class="load-dot" style="background:var(--heavy)"></span>Day 5</div>
-  <div class="day-tab" data-day="6"><span class="load-dot" style="background:var(--light)"></span>Day 6</div>
-  <div class="day-tab progress-tab" data-day="progress">◆ Progress</div>
+  <button type="button" class="day-tab active" data-day="1"><span class="load-dot" style="background:var(--heavy)"></span>Day 1</button>
+  <button type="button" class="day-tab" data-day="2"><span class="load-dot" style="background:var(--heavy)"></span>Day 2</button>
+  <button type="button" class="day-tab" data-day="3"><span class="load-dot" style="background:var(--heavy)"></span>Day 3</button>
+  <button type="button" class="day-tab" data-day="4"><span class="load-dot" style="background:var(--moderate)"></span>Day 4</button>
+  <button type="button" class="day-tab" data-day="5"><span class="load-dot" style="background:var(--heavy)"></span>Day 5</button>
+  <button type="button" class="day-tab" data-day="6"><span class="load-dot" style="background:var(--light)"></span>Day 6</button>
+  <button type="button" class="day-tab progress-tab" data-day="progress">◆ Progress</button>
 </nav>
 
 <!-- DAY 1 -->
@@ -741,8 +793,30 @@ footer{text-align:center;padding:30px 32px;color:var(--ink-faint);font-size:12px
     renderProgress();
   }
 
+  /* ---------- One-time user gate ---------- */
+  var gateOverlay = document.getElementById('gateOverlay');
+  var gatePick = document.getElementById('gatePick');
+
+  function enterApp(user){
+    gateOverlay.style.display = 'none';
+    switchUser(user);
+  }
+
   var savedUser = localStorage.getItem('forge_current_user');
-  switchUser(USERS.indexOf(savedUser) !== -1 ? savedUser : USERS[0]);
+  if(USERS.indexOf(savedUser) !== -1){
+    // Already chosen before — skip the picker entirely, every time from now on.
+    gateOverlay.style.display = 'none';
+    switchUser(savedUser);
+  } else {
+    gateOverlay.style.display = 'flex';
+    switchUser(USERS[0]); // render something underneath while the gate is up
+  }
+
+  gatePick.addEventListener('click', function(e){
+    var btn = e.target.closest('button[data-user]');
+    if(!btn) return;
+    enterApp(btn.getAttribute('data-user'));
+  });
 
   /* ---------- Day tabs ---------- */
   var tabs = document.querySelectorAll('.day-tab');
@@ -751,15 +825,46 @@ footer{text-align:center;padding:30px 32px;color:var(--ink-faint);font-size:12px
     tabs.forEach(function(t){
       var isActive = t.getAttribute('data-day') === day;
       t.classList.toggle('active', isActive);
-      if(isActive) t.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
     });
     sections.forEach(function(s){ s.classList.toggle('active', s.getAttribute('data-day') === day); });
     window.scrollTo({top: 0, behavior: 'smooth'});
+    var activeTab = document.querySelector('.day-tab.active');
+    if(activeTab) activeTab.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
     if(day === 'progress') renderProgress();
     updateRing();
   }
+
+  // Mobile fix: a tap that lands on a tab needing a horizontal scroll to reach
+  // (e.g. Day 2, Day 3) can get swallowed by the browser as "just scrolling"
+  // rather than a tap, so nothing opens. We track touch movement ourselves —
+  // if the finger barely moved, it counts as a tap regardless of any recent
+  // scroll gesture, and we handle it on touchend so it fires immediately.
   tabs.forEach(function(tab){
-    tab.addEventListener('click', function(){ showDay(tab.getAttribute('data-day')); });
+    var startX = 0, startY = 0, moved = false, touchHandled = false;
+
+    tab.addEventListener('touchstart', function(e){
+      var t = e.changedTouches[0];
+      startX = t.clientX; startY = t.clientY; moved = false;
+    }, {passive:true});
+
+    tab.addEventListener('touchmove', function(e){
+      var t = e.changedTouches[0];
+      if(Math.abs(t.clientX - startX) > 10 || Math.abs(t.clientY - startY) > 10) moved = true;
+    }, {passive:true});
+
+    tab.addEventListener('touchend', function(e){
+      if(!moved){
+        e.preventDefault();
+        touchHandled = true;
+        showDay(tab.getAttribute('data-day'));
+        setTimeout(function(){ touchHandled = false; }, 400);
+      }
+    });
+
+    tab.addEventListener('click', function(){
+      if(touchHandled) return; // avoid double-firing from the synthetic click after touchend
+      showDay(tab.getAttribute('data-day'));
+    });
   });
 
   /* ---------- Exercise checkboxes (session, resets daily) + auto-log ---------- */
